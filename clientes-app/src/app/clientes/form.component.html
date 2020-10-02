@@ -1,0 +1,120 @@
+<!--Implementamso nuestra vista--->
+<!--[(ngModel)]="":es una directiva que sirve para poblar el formulario
+al objeto al atributo Cliente lo que hace es un binding 0 poblar/ enlazar
+los datso al formulario al objeto cliente y sus atributos
+y es en ambas direcciones por ejemplo si vamos a buscar un cliente a travez 
+del servicio y no conectamos a un backend api-rest y obtenemos un cliente por id 
+a qui va a mostrar lo valores el objeto cliente por lo tanto el formulario esta asignado
+y mapeado a un objeto este objeto es un atributo  a qui tendremos un contenedro el cual
+sera una lista- tenemos dieferentes validador required para indicar que es requerido 
+el validador minlneght msnlneght:largo minimo y maximo de caracteres o algun tipo de patron
+con expresion regulae dirty: amedida que muestra el error y touched: cuando nos salimos del
+foco de error del ipnput-->
+<ul class="alert alert-danger"  *ngIf="errores?.length > 0">
+    <li *ngFor="let err of errores ">
+        {{  err }}
+    </li>
+</ul>
+
+<div class="card bg-dark  text-white">
+    <div class="card-header">{{titulo}}</div>
+       <div class="card-body">
+   
+           <form #clienteForm="ngForm" >
+             <!--Nombre-->
+               <div class="form-group row">
+                   <label for="nombre" class="col-form-label col-sm-2" >Nombre</label>
+                    <div class="col-sm-6">
+                       <input type="text" class="form-control" [(ngModel)]="cliente.nombre" name="nombre" #nombre="ngModel" > <!--required minlength="4"--->
+                        <div class="alert alert-danger" *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
+                            <div *ngIf="nombre.errors.required" >
+                                Nombre es requqerido!...
+
+
+                            </div>
+                            <div *ngIf="nombre.errors.minlength" >
+                                El nombre debe tener almenos 4 caracteres!...
+
+
+                            </div>
+                        </div>
+                    </div>
+               </div>
+   
+               <!--Apellido-->
+               <div class="form-group row">
+                   <label for="apellido" class="col-form-label col-sm-2" >Apellido</label>
+                    <div class="col-sm-6">
+                       <input type="text" class="form-control" [(ngModel)]="cliente.apellido" name="apellido"  #apellido="ngModel">  <!--required--->   
+                       <div class="alert alert-danger" *ngIf="apellido.invalid && (apellido.dirty || apellido.touched)">
+                        <div *ngIf="apellido.errors.required" >
+                            Apellido requqerido!...
+
+
+                        </div>
+                        
+                    </div>
+                  
+                    </div>
+               </div> 
+   
+               <!--Fecha-->
+        <div class="form-group row">
+             <label for="createAt" class="col-form-label col-sm-2" >Fecha</label>
+                <div class="col-sm-6">
+                  <input [matDatepicker]="miDatepicker" class="form-control" 
+                    [(ngModel)]="cliente.createAt" name="createAt"  style="display:inline; width:360px;">
+                    <mat-datepicker-toggle [for]="miDatepicker"></mat-datepicker-toggle>
+                    <mat-datepicker #miDatepicker></mat-datepicker> 
+               
+                 </div>
+            </div>
+            
+            <!--Region-->
+         <div class="form-group row">
+            <label for="region" class="col-form-label col-sm-2" >Region</label>
+             <div class="col-sm-6">
+                <select [compareWith]="compararRegion" class="form-control" [(ngModel)]="cliente.region" name="region"  style="width:500px;">
+                    <option [ngValue]="undefined">--    Selcciones una región   --</option>
+                    <option *ngFor="let region of regiones" [ngValue]="region">{{region.nombre}}</option>
+                    </select>
+                </div>
+            </div> 
+
+               <!--Email-->
+               <div class="form-group row">
+                   <label for="email" class="col-form-label col-sm-2" >Email</label>
+                    <div class="col-sm-6">
+                       <input type="text" class="form-control" [(ngModel)]="cliente.email" name="email"  #email="ngModel">  <!--required email-->         
+                       <div class="alert alert-danger" *ngIf="email.invalid && (email.dirty || email.touched)">
+                        <div *ngIf="email.errors.required" >
+                            Email es requqerido!...
+                        </div>
+                        <div *ngIf="email.errors.email" >
+                            Email se requieres un correro Valido ejemplo:ejemplo@correo.com!...
+                        </div>
+                     
+                    </div>
+                   
+                   
+                    </div>
+               </div>
+   
+               <div class="form-group row">
+                 <div class="col-sm-6">
+               <button class="btn btn-primary" role="button" (click)="create()" *ngIf="!cliente.id 
+                else elseBlock" [disabled]="!clienteForm.form.valid">Crear</button>    
+                   
+                <ng-template #elseBlock>
+                 <button class="btn btn-primary" role="button" (click)="update()"
+                 [disabled]="!clienteForm.form.valid">   Editar</button>    
+                </ng-template> 
+               
+               
+                </div>      
+   
+               </div>
+           </form>
+       </div>
+   </div>
+ 
